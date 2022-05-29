@@ -105,7 +105,7 @@ const Home: NextPage = () => {
                     setPostIdeaModal(true);
                   }
                 }}
-                className="text-sm w-full ml-2 max-w-[124px]"
+                className="text-sm w-full ml-2 max-w-[132px]"
               >
                 {mintingIdea ? "Minting Idea 💡" : "Mint Idea 💡"}
               </Button>
