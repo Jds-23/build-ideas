@@ -41,7 +41,7 @@ const Home: NextPage = () => {
       />
       <main className="w-full px-4 mx-auto max-w-3xl flex flex-col items-center font-semibold">
         <h1 className="mt-12 text-2xl sm:text-4xl text-center sm:mt-20">
-          🦄 Welcome, to builspace's idea board
+          🦄 Welcome, to buildspace idea board
         </h1>
         <p className="text-center text-lg mt-4 sm:mt-7">
           Buildspace Alumni can create ideas and vote or unvote them.
@@ -52,8 +52,8 @@ const Home: NextPage = () => {
               Since, this is a testnet get your test NFT here.
             </p>
             <p className="text-center text-sm">
-              Your NFT's Balance will determine weight of your vote (NFT
-              balance: {balance && balance.toString()})
+              Your NFT Balance will determine weight of your vote (NFT balance:{" "}
+              {balance && balance.toString()})
             </p>
             <Button
               onClick={mint}

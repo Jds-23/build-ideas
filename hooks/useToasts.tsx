@@ -19,7 +19,7 @@ const useToast = () => {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              stroke-width="2"
+              strokeWidth="2"
             >
               <path
                 stroke-linecap="round"
@@ -38,7 +38,7 @@ const useToast = () => {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              stroke-width="2"
+              strokeWidth="2"
             >
               <path
                 stroke-linecap="round"
@@ -76,7 +76,7 @@ const useToast = () => {
               cy="12"
               r="10"
               stroke="currentColor"
-              stroke-width="4"
+              strokeWidth="4"
             ></circle>
             <path
               className="opacity-75"
@@ -92,7 +92,7 @@ const useToast = () => {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              stroke-width="2"
+              strokeWidth="2"
             >
               <path
                 stroke-linecap="round"
@@ -127,7 +127,7 @@ const useToast = () => {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              stroke-width="2"
+              strokeWidth="2"
             >
               <path
                 stroke-linecap="round"
