@@ -90,25 +90,27 @@ const Home: NextPage = () => {
               {/* <button className="font-bold">_filter</button> */}
             </div>
           </div>
-          <div className="w-full p-2 mt-1 border border-strokes rounded-lg sm:mt-3 flex items-center">
-            <input
-              value={idea}
-              onChange={(e) => setIdea(e.target.value)}
-              placeholder="Mint a idea"
-              className="bg-transparent w-full border-none text-base placeholder:text-gray-300 font-semibold"
-            />
-            <Button
-              loading={mintingIdea}
-              onClick={() => {
-                if (idea.length > 0) {
-                  setPostIdeaModal(true);
-                }
-              }}
-              className="text-sm w-full ml-2 max-w-[124px]"
-            >
-              {mintingIdea ? "Minting Idea 💡" : "Mint Idea 💡"}
-            </Button>
-          </div>
+          {balance && !balance.isZero() && (
+            <div className="w-full p-2 mt-1 border border-strokes rounded-lg sm:mt-3 flex items-center">
+              <input
+                value={idea}
+                onChange={(e) => setIdea(e.target.value)}
+                placeholder="Mint a idea"
+                className="bg-transparent w-full border-none text-base placeholder:text-gray-300 font-semibold"
+              />
+              <Button
+                loading={mintingIdea}
+                onClick={() => {
+                  if (idea.length > 0) {
+                    setPostIdeaModal(true);
+                  }
+                }}
+                className="text-sm w-full ml-2 max-w-[124px]"
+              >
+                {mintingIdea ? "Minting Idea 💡" : "Mint Idea 💡"}
+              </Button>
+            </div>
+          )}
           <div className="w-full mt-3">
             {items.map((idea) => {
               return (
