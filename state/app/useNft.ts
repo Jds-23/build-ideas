@@ -5,12 +5,14 @@ import { JUST_NFT_ADDRESS } from "../../constants";
 import NFT_ABI from "../../constants/abis/JustNFT.json";
 import useWallet from "../wallet/hooks/useWallet";
 import { BigNumber, Contract } from "ethers";
+import useToast from "../../hooks/useToasts";
 
 const useNft = () => {
   const nftContract = useContract(JUST_NFT_ADDRESS, NFT_ABI, true);
   const { account, web3Provider } = useWallet();
   const [minting, setMinting] = useState(false);
   const [balance, setBalance] = useState<BigNumber | undefined>(undefined);
+  const { txSuccess, error, txWaiting, dismiss } = useToast();
 
   const getBalance = useCallback(async () => {
     if (nftContract && account) {
@@ -26,7 +28,10 @@ const useNft = () => {
       const nftContract = new Contract(JUST_NFT_ADDRESS, NFT_ABI, signer);
       setMinting(true);
       const tx = await nftContract.mint(account);
+      txWaiting("Minting...");
       await tx.wait();
+      dismiss();
+      txSuccess("Minted your NFT", tx.hash);
       console.log("Mined -- ", tx.hash);
       getBalance();
       setMinting(false);

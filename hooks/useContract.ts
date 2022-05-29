@@ -6,7 +6,7 @@ import useWallet from "../state/wallet/hooks/useWallet";
 import { SUPPORTED_NETWORKS } from "../constants/networks";
 
 const useContract = (
-  addressOrAddressMap: string | { [chainId: number]: string } | undefined,
+  addressOrAddressMap: string | { [chainId: string]: string } | undefined,
   ABI: any,
   withSignerIfPossible = true
 ) => {
@@ -20,10 +20,10 @@ const useContract = (
       SUPPORTED_NETWORKS[chainIdStr].rpcUrls[0]
     );
   return useMemo(() => {
-    if (!addressOrAddressMap || !ABI || !library || !chainId) return null;
+    if (!addressOrAddressMap || !ABI || !library || !chainIdStr) return null;
     let address: string | undefined;
     if (typeof addressOrAddressMap === "string") address = addressOrAddressMap;
-    else address = addressOrAddressMap[chainId];
+    else address = addressOrAddressMap[chainIdStr];
     if (!address) return null;
     try {
       return getContract(

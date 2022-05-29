@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useVote } from "../../state/app/hooks";
-import { getEllipsisTxt, nFormatter } from "../../utils";
+import useWallet from "../../state/wallet/hooks/useWallet";
+import { generatedNft, getEllipsisTxt, nFormatter } from "../../utils";
+import Button from "../Button";
 
 const IdeaCard = ({
   ideator,
@@ -17,51 +19,116 @@ const IdeaCard = ({
   dateCreated: string;
   index: number;
 }) => {
-  const { upVotes, downVotes, voting, upVote, downVote } = useVote(index);
+  const { account } = useWallet();
+  const {
+    upVotes: upVotesArr,
+    downVotes: downVotesArr,
+    votes,
+    voting,
+    upVote,
+    downVote,
+  } = useVote(index);
+  const votesCount = votes?.length ?? 0;
+  const upVotes =
+    upVotesArr?.reduce(
+      (previousValue, currentValue) =>
+        previousValue + currentValue.weight.toNumber(),
+      0
+    ) ?? 0;
+  const downVotes =
+    downVotesArr?.reduce(
+      (previousValue, currentValue) =>
+        previousValue + currentValue.weight.toNumber(),
+      0
+    ) ?? 0;
+  const voterAddresses = useMemo(
+    () => votes?.map((vote) => vote.voter),
+    [votes]
+  );
+
+  const haveYouVoted = useMemo(
+    () => !!account && voterAddresses?.includes(account),
+    [account, voterAddresses]
+  );
   return (
-    <div className="w-full p-1 mb-2 sm:p-3 rounded-md border border-strokes sm:rounded-xl">
-      <div className="w-full flex justify-between">
-        <div className="flex justify-between items-center">
-          <div className="w-6 h-6 rounded-full border border-black bg-white" />
-          <p className="font-semibold ml-1 text-xs">
-            {ideator.length > 15 ? getEllipsisTxt(ideator) : ideator}
-          </p>
-        </div>
-        <div className="rounded-lg text-[10px] cursor-pointer p-1 flex border border-strokes items-center">
-          <div className="relative w-[40px] ">
-            <div className="w-6 h-6 rounded-full border border-black bg-white" />
-            <div className="absolute top-0 left-2 w-6 h-6 rounded-full border border-black bg-white" />
-            <div className="absolute top-0 left-4 w-6 h-6 rounded-full border border-black bg-white" />
+    <div className="mb-2 pt-1">
+      {upVotes + downVotes === 0 ? (
+        <></>
+      ) : upVotes - downVotes < 0 ? (
+        <p className="text-red-500">▽ {Math.abs(upVotes - downVotes)}</p>
+      ) : (
+        <p className="text-green-500">△ {Math.abs(upVotes - downVotes)}</p>
+      )}
+      <div className="w-full p-1 mt-1 sm:p-3 rounded-md border border-strokes sm:rounded-xl">
+        <div className="w-full flex justify-between">
+          <div className="flex justify-between items-center">
+            {/* <div className="w-6 h-6 rounded-full border border-black bg-white" />
+             */}
+            <img
+              src={generatedNft(ideator)}
+              className="w-6 h-6 rounded-full border border-accent bg-white"
+            />
+            <p className="font-semibold ml-1 text-xs">
+              {ideator.length > 15 ? getEllipsisTxt(ideator) : ideator}
+            </p>
           </div>
-          <p>
-            +
-            {upVotes &&
-              downVotes &&
-              nFormatter(upVotes.add(downVotes).toNumber(), 3)}{" "}
-            Already Voted 👉
-          </p>
+          <div className="rounded-lg text-[10px] cursor-pointer p-1 flex border border-strokes items-center">
+            {votesCount === 0 ? (
+              <p>Be First To Vote 👇</p>
+            ) : (
+              <>
+                {haveYouVoted ? (
+                  <>
+                    {/* <div className="relative w-[40px] ">
+                      <div className="w-6 h-6 rounded-full border border-accent bg-white" />
+                      <div className="absolute top-0 left-2 w-6 h-6 rounded-full border border-accent bg-white" />
+                      <div className="absolute top-0 left-4 w-6 h-6 rounded-full border border-accent bg-white" />
+                    </div> */}
+                    <p>
+                      You
+                      {votesCount > 1 && (
+                        <>+{nFormatter(votesCount - 1, 3)}</>
+                      )}{" "}
+                      Already Voted 👉
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    {/* <div className="relative w-[40px] ">
+                      <div className="w-6 h-6 rounded-full border border-accent bg-white" />
+                      <div className="absolute top-0 left-2 w-6 h-6 rounded-full border border-accent bg-white" />
+                      <div className="absolute top-0 left-4 w-6 h-6 rounded-full border border-accent bg-white" />
+                    </div> */}
+                    <p>{nFormatter(votesCount, 3)} Already Voted 👉</p>
+                  </>
+                )}
+              </>
+            )}
+          </div>
         </div>
-      </div>
-      <p className="text-xs sm:text-sm font-semibold">{idea}</p>
-      <div className="mt-1 flex items-center justify-between">
-        <p className="text-texty opacity-50 font-bold text-[10px] sm:text-sm">
-          {dateCreated}
-        </p>
-        <div className="flex items-center">
-          <button
-            disabled={voting}
-            onClick={() => upVote(index)}
-            className="sm:text-sm text-xs font-bold"
-          >
-            {upVotes && nFormatter(upVotes.toNumber(), 3)} 👍
-          </button>
-          <button
-            disabled={voting}
-            onClick={() => downVote(index)}
-            className="sm:text-sm text-xs font-bold ml-3"
-          >
-            {downVotes && nFormatter(downVotes.toNumber(), 3)} 👎
-          </button>
+        <p className="text-xs sm:text-sm font-semibold">{idea}</p>
+        <div className="mt-1 w-full flex items-center justify-between">
+          <p className="text-texty opacity-50 font-bold text-[10px] sm:text-sm">
+            {dateCreated}
+          </p>
+          <div className="flex flex-grow justify-end items-center">
+            <Button
+              className="text-sm py-0.5 mr-1 w-full max-w-[80px]"
+              loading={voting}
+              disabled={haveYouVoted}
+              onClick={() => upVote(index)}
+            >
+              {upVotes && nFormatter(upVotes, 3)} 👍
+            </Button>
+            <Button
+              className="text-sm py-0.5 mr-1 w-full max-w-[80px]"
+              loading={voting}
+              disabled={haveYouVoted}
+              onClick={() => downVote(index)}
+            >
+              {downVotes && nFormatter(downVotes, 3)} 👎
+            </Button>
+          </div>
         </div>
       </div>
     </div>
