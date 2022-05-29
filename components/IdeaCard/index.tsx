@@ -6,41 +6,23 @@ import Button from "../Button";
 
 const IdeaCard = ({
   ideator,
-  // upVotes,
-  // downVotes,
+  upVotes,
+  votesCount,
+  downVotes,
   idea,
   dateCreated,
   index,
 }: {
   ideator: string;
-  // upVotes: number;
-  // downVotes: number;
+  votesCount: number;
+  upVotes: number;
+  downVotes: number;
   idea: string;
   dateCreated: string;
   index: number;
 }) => {
   const { account } = useWallet();
-  const {
-    upVotes: upVotesArr,
-    downVotes: downVotesArr,
-    votes,
-    voting,
-    upVote,
-    downVote,
-  } = useVote(index);
-  const votesCount = votes?.length ?? 0;
-  const upVotes =
-    upVotesArr?.reduce(
-      (previousValue, currentValue) =>
-        previousValue + currentValue.weight.toNumber(),
-      0
-    ) ?? 0;
-  const downVotes =
-    downVotesArr?.reduce(
-      (previousValue, currentValue) =>
-        previousValue + currentValue.weight.toNumber(),
-      0
-    ) ?? 0;
+  const { votes, voting, upVote, downVote } = useVote(index);
   const voterAddresses = useMemo(
     () => votes?.map((vote) => vote.voter),
     [votes]

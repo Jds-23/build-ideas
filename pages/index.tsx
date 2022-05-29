@@ -11,6 +11,8 @@ import useWallet from "../state/wallet/hooks/useWallet";
 import { getDate } from "../utils";
 import Modal from "../components/Modal";
 import { jsonFile, storeFile, storeFiles } from "../utils/storeFile";
+import { useSubgraph } from "../hooks/useSubgraph";
+import useSortableData from "../hooks/useSortableData";
 
 const Home: NextPage = () => {
   const [idea, setIdea] = useState("");
@@ -19,6 +21,8 @@ const Home: NextPage = () => {
   const { mintIdea, mintingIdea, allWaves } = useApp();
   const [postIdeaModal, setPostIdeaModal] = useState(false);
   const [postedIdeaModal, setPostedIdeaModal] = useState(false);
+  const data = useSubgraph();
+  const { requestSort, items, sortConfig } = useSortableData(data);
   return (
     <div>
       <Head>
@@ -71,8 +75,19 @@ const Home: NextPage = () => {
           <div className="w-full flex items-center justify-between">
             <p className="text-base sm:text-xl">Ideas</p>
             <div className="flex text-xs sm:text-sm">
-              <button className="font-bold mr-3">_sort</button>
-              <button className="font-bold">_filter</button>
+              <button
+                onClick={() => requestSort("score")}
+                className="font-bold mr-3"
+              >
+                _sort(by score)
+              </button>
+              <button
+                onClick={() => requestSort("timestamp")}
+                className="font-bold"
+              >
+                _sort(by time)
+              </button>
+              {/* <button className="font-bold">_filter</button> */}
             </div>
           </div>
           <div className="w-full p-2 mt-1 border border-strokes rounded-lg sm:mt-3 flex items-center">
@@ -95,20 +110,24 @@ const Home: NextPage = () => {
             </Button>
           </div>
           <div className="w-full mt-3">
-            {allWaves &&
-              allWaves.map((wave, i) => {
-                return (
-                  <IdeaCard
-                    ideator={wave?.ideator ?? ""}
-                    dateCreated={wave?.timestamp ? getDate(wave.timestamp) : ""}
-                    // downVotes={16100}
-                    // upVotes={26100}
-                    idea={wave?.idea ?? ""}
-                    index={i}
-                    key={i}
-                  />
-                );
-              })}
+            {items.map((idea) => {
+              return (
+                <IdeaCard
+                  ideator={idea?.from ?? ""}
+                  dateCreated={
+                    idea?.timestamp
+                      ? getDate(new Date(idea.timestamp * 1000))
+                      : ""
+                  }
+                  downVotes={idea.downScore}
+                  upVotes={idea.upScore}
+                  idea={idea?.ideaStr ?? ""}
+                  index={idea.id}
+                  votesCount={idea.votesCount}
+                  key={idea.id}
+                />
+              );
+            })}
           </div>
         </div>
       </main>
@@ -209,7 +228,7 @@ const PostIdeaModal = ({
       <span className="opacity-80 mb-1 w-full text-xs">{about.length}/500</span>
       {/* <ReactMarkdown children={about} remarkPlugins={[remarkGfm]} /> */}
       <Button
-        loading={mintingIdea}
+        loading={loading}
         block
         onClick={() => {
           if (idea.length > 0) {
