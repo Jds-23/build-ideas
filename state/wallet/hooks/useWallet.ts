@@ -68,7 +68,7 @@ const useWallet = () => {
       connect();
     } else {
       const rpcProvider = new ethers.providers.JsonRpcProvider(
-        "https://rpc-mumbai.maticvigil.com"
+        "https://eth-rinkeby.alchemyapi.io/v2/qt9AkXcbC7x1hTqKumB1Zd7AP0Fn0xnX"
       );
       dispatch({
         type: ActionTypes.initialWeb3Provider,

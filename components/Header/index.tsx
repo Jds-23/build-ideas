@@ -6,20 +6,19 @@ import { getEllipsisTxt } from "../../utils";
 import Button from "../Button";
 
 const Header = () => {
-  const { account, connect, chainId, provider, web3Provider } =
-    useWallet();
+  const { account, connect, chainId, provider, web3Provider } = useWallet();
   return (
-    <div className="fixed top-0 left-0 flex items-center justify-between w-full px-4 py-2 border-b bg-white border-b-strokes">
+    <div className="fixed top-0 left-0 flex items-center justify-between w-full px-4 py-2 border-b z-10 bg-white border-b-strokes">
       <Link href="/">
         <span className="text-lg font-bold cursor-pointer text-accent">
-            build_ideas
+          build_ideas
         </span>
       </Link>
       <button
         onClick={() => {
           if (!account) {
             connect();
-          } 
+          }
         }}
         className={`p-1.5 mx-1 ml-auto font-bold rounded-md justify-self-end ${
           account

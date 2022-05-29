@@ -3,9 +3,15 @@ import Head from "next/head";
 import { useState } from "react";
 import Button from "../components/Button";
 import IdeaCard from "../components/IdeaCard";
+import useApp from "../state/app/hooks";
+import useNft from "../state/app/useNft";
+import useWallet from "../state/wallet/hooks/useWallet";
 
 const Home: NextPage = () => {
   const [idea, setIdea] = useState("");
+  const { account } = useWallet();
+  const { mint, minting } = useNft();
+  const { mintIdea, mintingIdea, allWaves } = useApp();
   return (
     <div>
       <Head>
@@ -20,12 +26,26 @@ const Home: NextPage = () => {
         <p className="text-center text-lg mt-4 sm:mt-7">
           Buildspace Alumni can create ideas and vote or unvote them.
         </p>
-        <p className="text-center text-sm mt-3 sm:mt-6">
-          Since, this is a testnet get your test NFT here.
-        </p>
-        <Button className="text-sm mt-1 sm:mt-3 w-full max-w-[124px]">
-          Mint 🌟
-        </Button>
+        {account ? (
+          <>
+            <p className="text-center text-sm mt-3 sm:mt-6">
+              Since, this is a testnet get your test NFT here.
+            </p>
+            <Button
+              onClick={mint}
+              disabled={minting}
+              className="text-sm mt-1 sm:mt-3 w-full max-w-[124px]"
+            >
+              {minting ? "Minting 🌟" : "Mint 🌟"}
+            </Button>
+          </>
+        ) : (
+          <>
+            <p className="text-center text-sm mt-3 sm:mt-6">
+              Please Connect your wallet.
+            </p>
+          </>
+        )}
 
         <div className="mt-9 font-bold sm:mt-6 w-full">
           <div className="w-full flex items-center justify-between">
@@ -42,18 +62,38 @@ const Home: NextPage = () => {
               placeholder="Mint a idea"
               className="bg-transparent w-full border-none text-base placeholder:text-gray-300 font-semibold"
             />
-            <Button className="text-sm w-full ml-2 max-w-[124px]">
-              💡 Mint Idea
+            <Button
+              disabled={mintingIdea}
+              onClick={() => {
+                if (idea.length > 0) {
+                  mintIdea(idea);
+                  setIdea("");
+                }
+              }}
+              className="text-sm w-full ml-2 max-w-[124px]"
+            >
+              {mintingIdea ? "Minting Idea 💡" : "Mint Idea 💡"}
             </Button>
           </div>
           <div className="w-full mt-3">
-            <IdeaCard
-              ideator="0x40d5250D1ce81fdD1F0E0FB4F471E57AA0c1FaD3"
-              dateCreated="23 rd April’22"
-              downVotes={16100}
-              upVotes={26100}
-              idea="I am farza and I worked on self-driving cars so that's pretty cool right? Connect your Ethereum wallet and wave at me!"
-            />
+            {allWaves &&
+              allWaves.map((wave, i) => {
+                return (
+                  <IdeaCard
+                    ideator={wave?.ideator ?? ""}
+                    dateCreated={
+                      wave?.timestamp
+                        ? `${wave.timestamp.getUTCDate()} ${wave.timestamp.getUTCMonth()} ${wave.timestamp.getUTCFullYear()}`
+                        : ""
+                    }
+                    // downVotes={16100}
+                    // upVotes={26100}
+                    idea={wave?.idea ?? ""}
+                    index={i}
+                    key={i}
+                  />
+                );
+              })}
           </div>
         </div>
       </main>
