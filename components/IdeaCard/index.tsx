@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { useMemo } from "react";
 import { useVote } from "../../state/app/hooks";
 import useWallet from "../../state/wallet/hooks/useWallet";
@@ -66,13 +67,15 @@ const IdeaCard = ({
                       <div className="absolute top-0 left-2 w-6 h-6 rounded-full border border-accent bg-white" />
                       <div className="absolute top-0 left-4 w-6 h-6 rounded-full border border-accent bg-white" />
                     </div> */}
-                    <p>
-                      You
-                      {votesCount > 1 && (
-                        <>+{nFormatter(votesCount - 1, 3)}</>
-                      )}{" "}
-                      Already Voted 👉
-                    </p>
+                    <Link href={`/idea/${index}`}>
+                      <a>
+                        You
+                        {votesCount > 1 && (
+                          <>+{nFormatter(votesCount - 1, 3)}</>
+                        )}{" "}
+                        Already Voted 👉
+                      </a>
+                    </Link>
                   </>
                 ) : (
                   <>
