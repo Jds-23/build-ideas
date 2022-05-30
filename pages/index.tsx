@@ -157,6 +157,7 @@ const PostIdeaModal = ({
   mintingIdea: boolean;
 }) => {
   const [endTime, setEndTime] = useState("");
+  const [textEdit, setTextEdit] = useState(true);
   const [loading, setLoading] = useState(false);
   const [about, setAbout] = useState("");
   const [currentTime, setCurrentTime] = useState(
@@ -218,17 +219,30 @@ const PostIdeaModal = ({
           // console.log(e.target.value,(date.getTime()/1000))
         }}
       />
-      <span className="mt-1 text-sm font-semibold opacity-80">About</span>
-      <textarea
-        className="mt-1 w-full p-2 border-solid border-2 border-strokes rounded-md active:border-strokes focus:outline-none focus:shadow-outline grow"
-        value={about}
-        onChange={(e) => {
-          if (about.length <= 500) setAbout(e.target.value);
-        }}
-        placeholder="About (Markdown supported 📝)"
-      />
+      <div className="w-full mt-1 flex justify-between items-center">
+        <span className=" text-sm font-semibold opacity-80">About</span>
+        <Button
+          onClick={() => setTextEdit(!textEdit)}
+          className=" p-1 text-xs font-semibold opacity-80"
+        >
+          {!textEdit ? "📝 Edit" : "📰 Preview"}
+        </Button>
+      </div>
+      {textEdit ? (
+        <textarea
+          className="mt-1 w-full p-2 h-32  border-solid border-2 border-strokes rounded-md active:border-strokes focus:outline-none focus:shadow-outline grow"
+          value={about}
+          onChange={(e) => {
+            if (about.length <= 500) setAbout(e.target.value);
+          }}
+          placeholder="About (Markdown supported 📝)"
+        />
+      ) : (
+        <div className="mt-1 w-full p-2 h-32 markdown-style border-solid border-2 border-strokes rounded-md active:border-strokes focus:outline-none focus:shadow-outline grow">
+          <ReactMarkdown children={about} remarkPlugins={[remarkGfm]} />
+        </div>
+      )}
       <span className="opacity-80 mb-1 w-full text-xs">{about.length}/500</span>
-      {/* <ReactMarkdown children={about} remarkPlugins={[remarkGfm]} /> */}
       <Button
         loading={loading}
         block

@@ -57,7 +57,9 @@ const IdeaCard = ({
           </div>
           <div className="rounded-lg text-[10px] cursor-pointer p-1 flex border border-strokes items-center">
             {votesCount === 0 ? (
-              <p>Be First To Vote 👇</p>
+              <Link href={`/idea/${index}`}>
+                <a>Be First To Vote 👇</a>
+              </Link>
             ) : (
               <>
                 {haveYouVoted ? (
@@ -84,7 +86,9 @@ const IdeaCard = ({
                       <div className="absolute top-0 left-2 w-6 h-6 rounded-full border border-accent bg-white" />
                       <div className="absolute top-0 left-4 w-6 h-6 rounded-full border border-accent bg-white" />
                     </div> */}
-                    <p>{nFormatter(votesCount, 3)} Already Voted 👉</p>
+                    <Link href={`/idea/${index}`}>
+                      <a>{nFormatter(votesCount, 3)} Already Voted 👉</a>
+                    </Link>
                   </>
                 )}
               </>

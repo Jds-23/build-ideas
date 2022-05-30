@@ -10,8 +10,13 @@ const Header = () => {
   return (
     <div className="fixed top-0 left-0 flex items-center justify-between w-full px-4 py-2 border-b z-10 bg-white border-b-strokes">
       <Link href="/">
-        <span className="text-lg font-bold cursor-pointer text-accent">
-          build_ideas
+        <span>
+          <span className="text-lg hidden sm:block font-bold cursor-pointer text-accent">
+            🛠 build_ideas
+          </span>
+          <span className="text-lg sm:hidden block font-bold cursor-pointer text-accent">
+            🛠
+          </span>
         </span>
       </Link>
       <button
