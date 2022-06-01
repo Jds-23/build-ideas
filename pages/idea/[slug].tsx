@@ -108,10 +108,9 @@ const Idea = () => {
         <p className="mb-2 text-lg">{theone?.ideaStr}</p>
         <div className="rounded-lg markdown-style min-h-[400px] mb-8 overflow-auto border border-strokes p-2">
           {metadata?.about && (
-            <ReactMarkdown
-              children={metadata?.about}
-              remarkPlugins={[remarkGfm]}
-            />
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {metadata?.about}
+            </ReactMarkdown>
           )}
         </div>
       </div>

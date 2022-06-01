@@ -239,7 +239,7 @@ const PostIdeaModal = ({
         />
       ) : (
         <div className="mt-1 w-full p-2 h-32 markdown-style border-solid border-2 border-strokes rounded-md active:border-strokes focus:outline-none focus:shadow-outline grow">
-          <ReactMarkdown children={about} remarkPlugins={[remarkGfm]} />
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{about}</ReactMarkdown>
         </div>
       )}
       <span className="opacity-80 mb-1 w-full text-xs">{about.length}/500</span>
