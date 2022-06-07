@@ -19,6 +19,12 @@ a {
 * {
   box-sizing: border-box;
 }
+.markdown-style ol,
+ul {
+  list-style: inside;
+  margin: auto;
+  padding: inherit;
+}
 .markdown-style h1 {
   font-size: 2.5rem;
   font-weight: 700;
